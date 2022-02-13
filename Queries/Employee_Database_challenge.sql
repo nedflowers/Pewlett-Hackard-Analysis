@@ -23,7 +23,17 @@ DROP TABLE titles_info;
 
 DROP TABLE retirement_info;
 
-DROP TABLE retirement_tables;
+DROP TABLE retirement_titles;
+
+DROP TABLE unique_titles;
+
+DROP TABLE retiring_titles;
+
+DROP TABLE mentor_emp;
+
+DROP TABLE mentor_dept;
+
+DROP TABLE mentor_title;
 
 -- Creating tables for PH-EmployeeDB
 CREATE TABLE departments (
@@ -160,4 +170,52 @@ ORDER BY COUNT DESC
 SELECT * FROM retiring_titles;
 
 
+--- DELIVERABLE 2 ---
+-- Get emp_no, first_name, last_name, birth_date columns from the employees table
+SELECT DISTINCT ON (emp_no) emp_no,
+	first_name,
+		last_name,
+	birth_date
+INTO mentor_emp
+FROM employees
 
+SELECT * FROM mentor_emp;
+
+-- Get from_date and to_date columns from the dept_emp table
+SELECT DISTINCT ON (emp_no) emp_no,
+	from_date,
+		to_date
+INTO mentor_dept
+FROM dept_emp
+
+SELECT * FROM mentor_dept;
+
+-- Get title column from the Titles table
+SELECT DISTINCT ON (emp_no)
+		emp_no,
+	title
+INTO mentor_title
+FROM titles
+
+SELECT * FROM mentor_title;
+
+-- Join all 3 tables 
+SELECT me.emp_no,
+		me.first_name,
+	me.last_name,
+		me.birth_date,
+	md.from_date,
+		md.to_date,
+	mt.title
+INTO mentorship_eligibilty
+-- Def aliases with join and from statemnets
+FROM mentor_emp as me
+INNER JOIN mentor_dept AS md
+ON (me.emp_no = md.emp_no)
+LEFT JOIN mentor_title as mt
+ON (md.emp_no = mt.emp_no)
+WHERE (md.to_date = '9999-01-01')
+	AND (me.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+ORDER BY emp_no;
+
+SELECT * FROM mentorship_eligibilty;
