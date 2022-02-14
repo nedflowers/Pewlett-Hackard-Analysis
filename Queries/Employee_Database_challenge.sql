@@ -3,15 +3,13 @@ DROP TABLE departments;
 
 DROP TABLE dept_emp;
 
-DROP TABLE dept_manager;
-
-DROP TABLE emp_count;
-
 DROP TABLE employees;
 
 DROP TABLE mentor_dept;
 
 DROP TABLE mentor_emp;
+
+DROP TABLE mentor_title;
 
 DROP TABLE mentorship_eliibiity;
 
@@ -23,11 +21,9 @@ DROP TABLE retirement_titles;
 
 DROP TABLE retiring_titles;
 
-DROP TABLE salaries;
-
 DROP TABLE titles;
 
-DROP TABLE tiles_info;
+DROP TABLE titles_info;
 
 DROP TABLE unique_titles;
 
@@ -49,24 +45,6 @@ CREATE TABLE employees (
 	PRIMARY KEY (emp_no)
 );
 
-CREATE TABLE dept_manager (
-	dept_no VARCHAR(4) NOT NULL,
-	emp_no INT NOT NULL,
-	from_date DATE NOT NULL,
-	to_date DATE NOT NULL,
-FOREIGN KEY (emp_no) REFERENCES employees (emp_no),
-FOREIGN KEY (dept_no) REFERENCES departments (dept_no),
-	PRIMARY KEY (emp_no, dept_no)
-);
-
-CREATE TABLE salaries (
-  emp_no INT NOT NULL,
-  salary INT NOT NULL,
-  from_date DATE NOT NULL,
-  to_date DATE NOT NULL,
-  FOREIGN KEY (emp_no) REFERENCES employees (emp_no),
-  PRIMARY KEY (emp_no)
-);
 
 CREATE TABLE titles (
 	emp_no INT NOT NULL,
@@ -90,11 +68,7 @@ SELECT * FROM departments;
 
 SELECT * FROM employees;
 
-SELECT * FROM dept_manager;
-
 SELECT * FROM dept_emp;
-
-SELECT * FROM salaries;
 
 SELECT * FROM titles;
 
@@ -142,7 +116,7 @@ SELECT DISTINCT ON (rt.emp_no) rt.emp_no,
 	rt.first_name,
 		rt.last_name,
 		rt.title
--- INTO unique_titles
+INTO unique_titles
 FROM retirement_titles AS rt
 WHERE (rt.to_date = '9999-01-01')
 ORDER BY rt.emp_no ASC, rt.to_date DESC
@@ -227,19 +201,5 @@ ORDER BY COUNT DESC
 
 SELECT* FROM mentorship_titles;
 
------ Total current employees-----
-SELECT DISTINCT ON (ri.emp_no) ri.emp_no,
-	 	ri.first_name,
-	ri.last_name,
-	 ri.title,
-		ti.from_date,
-	 ti.to_date
-INTO  emp_count
-FROM retirement_info AS ri
-INNER JOIN titles_info AS ti
-ON (retirement_info.emp_no = titles_info.emp_no)
-WHERE (titles_info.to_date = '9999-01-01')
-ORDER BY emp_no
-
-SELECT COUNT (emp_no) FROM emp_count;
-
+-- Find sum of mentorship
+SELECT SUM (COUNT) FROM mentorship_titles;
