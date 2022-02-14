@@ -1,39 +1,35 @@
 ---Drop table if exists ----
-DROP TABLE retirement_info;
-
-DROP TABLE current_emp;
-
-DROP TABLE emp_info;
-
-DROP TABLE retire_count;
-
 DROP TABLE departments;
-
-DROP TABLE employees;
-
-DROP TABLE dept_manager;
 
 DROP TABLE dept_emp;
 
-DROP TABLE salaries;
+DROP TABLE dept_manager;
 
-DROP TABLE titles;
+DROP TABLE emp_count;
 
-DROP TABLE titles_info;
+DROP TABLE employees;
+
+DROP TABLE mentor_dept;
+
+DROP TABLE mentor_emp;
+
+DROP TABLE mentorship_eliibiity;
+
+DROP TABLE mentorship_titles;
 
 DROP TABLE retirement_info;
 
 DROP TABLE retirement_titles;
 
-DROP TABLE unique_titles;
-
 DROP TABLE retiring_titles;
 
-DROP TABLE mentor_emp;
+DROP TABLE salaries;
 
-DROP TABLE mentor_dept;
+DROP TABLE titles;
 
-DROP TABLE mentor_title;
+DROP TABLE tiles_info;
+
+DROP TABLE unique_titles;
 
 -- Creating tables for PH-EmployeeDB
 CREATE TABLE departments (
@@ -142,12 +138,11 @@ SELECT * FROM retirement_titles;
 -- Use the DISTINCT ON, get first occurrence of emp_no
 -- Filter only current employees
 -- Create unique_titles table and sort emp_no ASC, to_date DESC
-SELECT DISTINCT ON(rt.emp_no)
-	rt.emp_no,
+SELECT DISTINCT ON (rt.emp_no) rt.emp_no,
 	rt.first_name,
 		rt.last_name,
 		rt.title
-INTO unique_titles
+-- INTO unique_titles
 FROM retirement_titles AS rt
 WHERE (rt.to_date = '9999-01-01')
 ORDER BY rt.emp_no ASC, rt.to_date DESC
@@ -216,6 +211,35 @@ LEFT JOIN mentor_title as mt
 ON (md.emp_no = mt.emp_no)
 WHERE (md.to_date = '9999-01-01')
 	AND (me.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
-ORDER BY emp_no;
+ORDER BY emp_no
 
 SELECT * FROM mentorship_eligibilty;
+
+-- Find sum of positions becoming vacant
+SELECT SUM (COUNT) FROM retiring_titles;
+
+--- Dettermine if enough employees for membership program
+SELECT COUNT(title), title
+INTO mentorship_titles
+FROM mentorship_eligibilty
+GROUP BY mentorship_eligibilty.title
+ORDER BY COUNT DESC
+
+SELECT* FROM mentorship_titles;
+
+----- Total current employees-----
+SELECT DISTINCT ON (ri.emp_no) ri.emp_no,
+	 	ri.first_name,
+	ri.last_name,
+	 ri.title,
+		ti.from_date,
+	 ti.to_date
+INTO  emp_count
+FROM retirement_info AS ri
+INNER JOIN titles_info AS ti
+ON (retirement_info.emp_no = titles_info.emp_no)
+WHERE (titles_info.to_date = '9999-01-01')
+ORDER BY emp_no
+
+SELECT COUNT (emp_no) FROM emp_count;
+
