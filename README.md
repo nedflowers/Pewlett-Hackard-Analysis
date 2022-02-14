@@ -1,7 +1,7 @@
 # Pewlett-Hackard-Analysis
 
 ## Overview of Project
-As people born between 1946-1964 begin to retire at rapid rates, companies must prepare for a mass vacancy of jobs. With the use of SQL, analyze company data to determine the number of retiring employees per job title. Then, find all employees who are eligible to participate in a mentorship program. Finally, deduce if there are enough retirement-ready employees to train mentorship-eligible employees for all departments. 
+As people born between 1946-1964 begin to retire at rapid rates, companies must prepare for a mass vacancy of jobs. With the use of SQL, analyze company data to determine the number of retiring employees per job title. Then, find all employees who are eligible to participate in a mentorship program. Finally, deduce if there are enough retirement-ready employees to mentor eligible employees at each department. 
 
 ## Analysis and Challenges
 
